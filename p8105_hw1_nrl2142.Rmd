@@ -1,0 +1,87 @@
+---
+title: "p8105_hw1_nrl2142"
+output: html_document
+date: "2025-09-14"
+---
+
+# Problem 1 
+
+```{r echo = TRUE, message = FALSE}
+library(ggplot2)
+library(moderndive)
+data("early_january_weather")
+```
+
+# Short Description of the data set 
+This dataset contains `r nrow(early_january_weather)` rows and `r ncol(early_january_weather)` columns. 
+Some of the key variables include:
+**origin**: site where weather was recorded.
+**year, month, day, hour, time_hour**: date and time information for each observation.
+**temp**: temperature in Farenheit.
+**humid**: humidity (percentage).
+**wind_dir**: wind direction in degrees.
+**wind_speed**: wind speed in mph.
+**wind_gust**: maximum wind gust in mph.
+**precip**: precipitation in inches.
+**pressure**: atmospheric pressure in millibars.
+**visib**: visibility in miles.
+The mean temperature is `r mean(early_january_weather$temp, na.rm = TRUE)` farenheit.
+
+# Making a Scatterplot
+```{r}
+ggplot(early_january_weather,
+       aes(x=time_hour,y=temp, color=humid))+
+  geom_point(alpha=0.7)+
+  labs(
+    title = "Temperature vs Time (colored by Humidity)",
+    x = "Time (hourly)",
+    y = "Temperature (Farenheit)",
+    color = "Humidity (%)"
+  ) +
+  theme_minimal()
+```
+
+# Description of Scatterplot 
+There isn't a clear linear relationship between temperature and humidity from the scatterplot. However, lower temperatures are often associated with lower humidity levels as represented by the darker colors in the scatterplot. 
+
+# Export the Scatterplot 
+```{r}
+ggsave(filename = "temp_vs_time_scatter.png")
+```
+
+# Problem 2 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library (tidyverse)
+set.seed (123)
+```
+# Creating the Dataframe 
+```{r create-data}
+num <- rnorm(10)
+is_pos <- num >0
+color <- c("yellow","blue","green","yellow","red","blue","purple","green","yellow","red")
+tier <- factor(c("low","med","high","low","med","high","low","med","high","low"),levels = c("low,","med","high"))
+
+df <- tibble(num = num, is_pos = is_pos, color = color, tier = tier)
+```
+
+# Trying to take the means of each variable 
+```{r means}
+mean(pull(df,num))
+mean(pull(df, is_pos))
+```
+
+# Writeup 
+Character and factor gives errors when trying to take the mean. However, numeric mean `r mean(df$num)` and logical mean `r mean(df$is_pos)` works. 
+
+# Trying coercion with `as.numeric()`
+```{r coercion, results ='hide'}
+as.numeric(df$is_pos)
+as.numeric(df$color)
+as.numeric(df$tier)
+```
+# Prose for what happens and why?
+Character variables produce NA and gives a warning message. This is because "yellow" does not have a numeric representation so R can't turn it into a number. Factors work and according to Google, it's because they are assigned integer codes (1,2,3) and the mean just ends up being the average code. Taking the means of these codes will no have real meaning in the context of categories unless if it is being used to describe severity. According to Google, in R, TRUE is internally stored as 1 and FALSE as 0 so coercing to numeric will just reveal this encoding. Taking the mean will explain what happens as the mean of the logical vector will still give us the proportion of TRUE values. 
+
+
+

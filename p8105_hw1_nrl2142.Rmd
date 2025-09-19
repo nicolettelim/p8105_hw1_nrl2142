@@ -8,7 +8,6 @@ date: "2025-09-14"
 
 ```{r echo = TRUE, message = FALSE}
 library(tidyverse)
-library(ggplot2)
 library(moderndive)
 ```
 
@@ -27,7 +26,7 @@ This dataset contains `r nrow(early_january_weather)` rows and `r ncol(early_jan
 **precip**: precipitation in inches.
 **pressure**: atmospheric pressure in millibars.
 **visib**: visibility in miles.
-The mean temperature is `r mean(early_january_weather$temp, na.rm = TRUE)` farenheit.
+The mean temperature is `r mean(early_january_weather$temp, na.rm = TRUE)` farenheit. Other values of important varaibles can be found in `skimr::skim(early_january_weather)`. 
 
 ## Making a Scatterplot
 ```{r}
@@ -56,7 +55,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 set.seed(123)
 ```
 ## Creating the Dataframe 
-```{r create-data}
+```{r}
 num <- rnorm(10)
 is_pos <- num > 0
 color <- c("yellow","blue","green","yellow","red","blue","purple","green","yellow","red")
@@ -68,17 +67,17 @@ df <- tibble(num = num, is_pos = is_pos, color = color, tier = tier)
 ## Trying to take the means of each variable 
 ```{r means}
 mean(pull(df,num))
-mean(pull(df, is_pos))
+mean(pull(df, logical))
 mean(pull(df,color))
 mean(pull(df,tier))
 ```
 
 ## Writeup 
-Character variable `color` and factor variable `tier` gives errors when trying to take the mean. However, numeric mean `r mean(df$num)` and logical mean `r mean(df$is_pos)` works. 
+Character variable `color` and factor variable `tier` gives errors when trying to take the mean. However, numeric mean `r mean(df$num)` and logical mean `r mean(df$logical)` works. 
 
 ## Trying coercion with `as.numeric()`
 ```{r coercion, results ='hide', warning=FALSE}
-as.numeric(df$is_pos)
+as.numeric(df$logical)
 as.numeric(df$color)
 as.numeric(df$tier)
 as.numeric(df$color)
